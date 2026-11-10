@@ -1,5 +1,4 @@
-/* Joyful Casa: static HTML/CSS/JS frontend + Supabase persistence.
-   Set SUPABASE_URL and SUPABASE_ANON_KEY below after creating your project. */
+
 const SUPABASE_URL = "https://mthxgxrgiaxzelltmoiu.supabase.co";
 const SUPABASE_ANON_KEY = "Ysb_publishable_WyRbpxxvvOHaxe9s_IubEQ_X-hLL2Zr";
 const CONFIGURED = !SUPABASE_URL.startsWith("YOUR_") && !SUPABASE_ANON_KEY.startsWith("YOUR_");
