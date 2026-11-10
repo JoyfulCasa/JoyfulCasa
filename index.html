@@ -1,1 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Joyful Casa</title>
+<link rel="stylesheet" href="styles.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#home" id="siteBrand">Joyful Casa</a>
+  <nav id="siteNav" aria-label="Main navigation"></nav>
+  <button id="adminOpen" class="quiet">Admin password</button>
+</header>
+<main id="app">
+  <section class="hero" id="home">
+    <p class="kicker" id="heroKicker">A little home for a joyful life</p>
+    <h1 id="heroTitle">Welcome to Joyful Casa</h1>
+    <p class="hero-copy" id="heroCopy">Thoughtful living, everyday inspiration, and little things that make a house feel like home.</p>
+  </section>
+  <div id="pageSections"></div>
+</main>
+<footer id="siteFooter">Made with love at Joyful Casa</footer>
 
+<dialog id="loginDialog" class="dialog">
+  <form method="dialog" id="loginForm">
+    <button class="dialog-close" value="cancel" aria-label="Close">×</button>
+    <p class="kicker">Private editor</p><h2>Welcome back</h2>
+    <p>Enter the admin password to edit Joyful Casa.</p>
+    <label for="adminEmail">Admin email</label>
+    <input id="adminEmail" type="email" autocomplete="username" placeholder="Your admin email" required>
+    <label for="adminPassword">Admin password</label>
+    <input id="adminPassword" type="password" autocomplete="current-password" required>
+    <p id="loginError" class="error"></p>
+    <button type="button" id="loginButton">Sign in</button>
+  </form>
+</dialog>
+
+<aside id="editor" class="editor hidden" aria-label="Website editor">
+  <div class="editor-head">
+    <div><p class="kicker">Joyful Casa</p><h2>Website editor</h2></div>
+    <button id="logoutButton" class="quiet">Log out</button>
+  </div>
+  <p class="editor-note">Edit the page, then press Save changes. Your published site updates for visitors.</p>
+  <div class="editor-tabs">
+    <button data-tab="content" class="active">Content</button>
+    <button data-tab="design">Design</button>
+    <button data-tab="pages">Sections</button>
+  </div>
+  <section class="tab-panel" id="tab-content">
+    <label>Site name<input id="editBrand"></label>
+    <label>Welcome heading<input id="editHeroTitle"></label>
+    <label>Welcome description<textarea id="editHeroCopy"></textarea></label>
+    <label>Small welcome line<input id="editKicker"></label>
+    <label>Footer text<input id="editFooter"></label>
+    <hr>
+    <h3>Selected section</h3>
+    <label>Section title<input id="editSectionTitle"></label>
+    <div class="button-row">
+      <button id="addText" class="soft">+ Text</button>
+      <button id="addImage" class="soft">+ Image</button>
+      <button id="addLink" class="soft">+ Link</button>
+      <button id="addBlogPost" class="soft">+ Blog post</button>
+      <button id="addProduct" class="soft">+ Product link</button>
+    </div>
+    <div id="blockEditor"></div>
+  </section>
+  <section class="tab-panel hidden" id="tab-design">
+    <h3>Color palette</h3>
+    <div class="color-grid">
+      <label>Background<input type="color" id="colorBg"></label>
+      <label>Cards<input type="color" id="colorCard"></label>
+      <label>Text<input type="color" id="colorText"></label>
+      <label>Accent<input type="color" id="colorAccent"></label>
+      <label>Soft accent<input type="color" id="colorSoft"></label>
+    </div>
+    <p class="hint">Color changes preview instantly. Save to publish them.</p>
+  </section>
+  <section class="tab-panel hidden" id="tab-pages">
+    <h3>Sections & pages</h3>
+    <div id="sectionList"></div>
+    <div class="button-row">
+      <button id="newPage" class="soft">+ New page section</button>
+      <button id="newBlog" class="soft">+ Blog section</button>
+      <button id="newShop" class="soft">+ Shop section</button>
+    </div>
+    <p class="hint">Use the arrows to change section order. Select a section to edit it.</p>
+  </section>
+  <div class="editor-bottom">
+    <span id="saveMessage" class="hint">Changes are not saved yet.</span>
+    <button id="saveButton">Save changes</button>
+  </div>
+</aside>
+<div id="toast" role="status" class="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>
