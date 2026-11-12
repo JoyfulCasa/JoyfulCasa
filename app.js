@@ -1,8 +1,9 @@
-
-const SUPABASE_URL = "https://mthxgxrgiaxzelltmoiu.supabase.co";
-const SUPABASE_ANON_KEY = "Ysb_publishable_WyRbpxxvvOHaxe9s_IubEQ_X-hLL2Zr";
+/* Joyful Casa: static HTML/CSS/JS frontend + Supabase persistence.
+   Set SUPABASE_URL and SUPABASE_ANON_KEY below after creating your project. */
+const SUPABASE_URL = "YOUR_SUPABASE_PROJECT_URL";
+const SUPABASE_ANON_KEY = "YOUR_SUPABASE_PUBLISHABLE_OR_ANON_KEY";
 const CONFIGURED = !SUPABASE_URL.startsWith("YOUR_") && !SUPABASE_ANON_KEY.startsWith("YOUR_");
-const supabase = CONFIGURED ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+const db = CONFIGURED ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 const $ = id => document.getElementById(id);
 const starter = {
   brand:"Joyful Casa",kicker:"A little home for a joyful life",heroTitle:"Welcome to Joyful Casa",
@@ -56,23 +57,23 @@ function renderEditor(){
 }
 function editorValues(){site.brand=$("editBrand").value;site.heroTitle=$("editHeroTitle").value;site.heroCopy=$("editHeroCopy").value;site.kicker=$("editKicker").value;site.footer=$("editFooter").value;const s=currentSection();if(s)s.title=$("editSectionTitle").value}
 async function fetchSite(){
- if(!supabase)return;
- const {data,error}=await supabase.from("joyful_casa_content").select("content").eq("id",1).maybeSingle();
+ if(!db)return;
+ const {data,error}=await db.from("joyful_casa_content").select("content").eq("id",1).maybeSingle();
  if(!error&&data?.content){site=data.content;selectedSectionId=site.sections[0]?.id||null}
  renderSite();
 }
 async function signIn(){
  $("loginError").textContent="";
- if(!supabase){$("loginError").textContent="Set up Supabase in app.js and run the SQL setup first.";return}
- const {error}=await supabase.auth.signInWithPassword({email:$("adminEmail").value,password:$("adminPassword").value});
+ if(!db){$("loginError").textContent="Set up Supabase in app.js and run the SQL setup first.";return}
+ const {error}=await db.auth.signInWithPassword({email:$("adminEmail").value,password:$("adminPassword").value});
  if(error){$("loginError").textContent=error.message;return}
  isAdmin=true;$("loginDialog").close();$("editor").classList.remove("hidden");renderEditor();toast("Editor unlocked");
 }
-async function signOut(){if(supabase)await supabase.auth.signOut();isAdmin=false;$("editor").classList.add("hidden");toast("Signed out")}
+async function signOut(){if(db)await db.auth.signOut();isAdmin=false;$("editor").classList.add("hidden");toast("Signed out")}
 async function saveSite(){
  editorValues();
- if(!supabase){toast("Connect Supabase before saving online.");return}
- const {error}=await supabase.from("joyful_casa_content").upsert({id:1,content:site});
+ if(!db){toast("Connect Supabase before saving online.");return}
+ const {error}=await db.from("joyful_casa_content").upsert({id:1,content:site});
  if(error){toast("Could not save: "+error.message);return}
  dirty=false;$("saveMessage").textContent="Saved and published";toast("Joyful Casa is updated");renderSite();
 }
@@ -111,5 +112,5 @@ $("editor").addEventListener("input",e=>{
 });
 $("addText").onclick=()=>addBlock("text");$("addImage").onclick=()=>addBlock("image");$("addLink").onclick=()=>addBlock("link");$("addBlogPost").onclick=()=>addBlock("blogpost");$("addProduct").onclick=()=>addBlock("product");
 $("newPage").onclick=()=>addSection("page");$("newBlog").onclick=()=>addSection("blog");$("newShop").onclick=()=>addSection("shop");
-if(supabase){supabase.auth.getSession().then(({data})=>{if(data.session){isAdmin=true;$("editor").classList.remove("hidden");renderEditor()}})}
+if(db){db.auth.getSession().then(({data})=>{if(data.session){isAdmin=true;$("editor").classList.remove("hidden");renderEditor()}})}
 renderSite();fetchSite();
